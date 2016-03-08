@@ -1,0 +1,15 @@
+import cv2
+import math
+import numpy as np
+from matplotlib import pyplot as plt
+
+def draw(mask, location, gesture):
+
+    return
+
+def main():
+
+    return 
+
+if __name__ == '__main__':
+  main()
