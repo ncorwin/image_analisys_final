@@ -12,7 +12,7 @@ x=0
 def draw(location, mask, img):
     x,y = location
 
-    b = 0
+    b = 255
     g = 0
     r = 255
 
@@ -166,6 +166,8 @@ def main():
 	null, raw_img =cap.read()
 	#initialize the array 'avg'
 	avg = np.float32(raw_img)
+        out_img = cv2.cvtColor(raw_img, cv2.COLOR_BGR2RGB)
+        out_img = cv2.cvtColor(out_img, cv2.COLOR_RGB2BGR)
 
 ###############################################################
         draw_layer = cv2.imread('draw_layer.jpg')
@@ -177,6 +179,8 @@ def main():
 		null, raw_img = cap.read()
 		bg_img, avg = remove_bg(raw_img, avg)
 		fg_mask = foreground(bg_img, raw_img)
+                out_img = cv2.cvtColor(raw_img, cv2.COLOR_BGR2RGB)
+                out_img = cv2.cvtColor(out_img, cv2.COLOR_RGB2BGR)
 
 		#fg_gray = cv2.cvtColor(fg_img,cv2.COLOR_BGR2GRAY)
 		contours, hier = cv2.findContours(fg_mask,cv2.RETR_EXTERNAL,cv2.CHAIN_APPROX_NONE)
@@ -198,7 +202,7 @@ def main():
 #########################################################################
                 tip = []
                 for i in range(len(hull)):
-                        measure = 15
+                        measure = 10
                         nx,ny = hull[i,0]
                         if i < 2:
                                 nx1,ny1 = hull[i+1,0]
@@ -227,15 +231,15 @@ def main():
                 if len(tip) > 0:
                         print tip[0]
                         cv2.circle(raw_img, tip[0], 25, (0,0,0), -1)
-                        draw_img = draw(tip[0], draw_layer, raw_img)
+                        draw_img = draw(tip[0], draw_layer, out_img)
                 else:
-                        draw_img = draw((0,0), draw_layer, raw_img)
+                        draw_img = draw((0,0), draw_layer, out_img)
 #########################################################################
 		if len(hull) != 0:
 			#print hull[0:,0]
 			print hull.shape
-		cv2.imshow("raw_img", raw_img)
-                #cv2.imshow("draw_img", np.fliplr(draw_img))
+		cv2.imshow("raw_img", np.fliplr(raw_img))
+                cv2.imshow("draw_img", np.fliplr(draw_img))
 		#cv2.imshow("bg_img", bg_img)
 
 		#break statement for image processing
